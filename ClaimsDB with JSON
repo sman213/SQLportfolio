@@ -1,0 +1,54 @@
+-- Create the Patients table to store patient information
+CREATE TABLE Patients (
+  PatientID INT PRIMARY KEY NOT NULL UNIQUE,
+  FirstName VARCHAR(50) NOT NULL,
+  LastName VARCHAR(50) NOT NULL,
+  DOB DATE NOT NULL,
+  Address VARCHAR(100) NOT NULL,
+  PhoneNumber VARCHAR(15) NOT NULL,
+  AdditionalInfo JSON
+);
+
+-- Create the Providers table to store provider information
+CREATE TABLE Providers (
+  ProviderID INT PRIMARY KEY NOT NULL UNIQUE,
+  ProviderName VARCHAR(100) NOT NULL,
+  Address VARCHAR(100) NOT NULL,
+  PhoneNumber VARCHAR(15) NOT NULL,
+  Specialty VARCHAR(50) NOT NULL,
+  AdditionalInfo JSON
+);
+
+-- Create the Claims table to store claim information
+CREATE TABLE Claims (
+  ClaimID INT PRIMARY KEY NOT NULL UNIQUE,
+  PatientID INT NOT NULL UNIQUE,
+  ProviderID INT NOT NULL UNIQUE,
+  ServiceDate DATE NOT NULL,
+  ServiceType VARCHAR(50) NOT NULL,
+  Amount DECIMAL(10, 2) NOT NULL,
+  AdditionalInfo JSON,
+  FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+  FOREIGN KEY (ProviderID) REFERENCES Providers(ProviderID)
+);
+
+-- Insert some sample patient data with additional information in JSON format
+INSERT INTO Patients (PatientID, FirstName, LastName, DOB, Address, PhoneNumber, AdditionalInfo)
+VALUES 
+  (1, 'John', 'Doe', '1980-01-01', '123 Main St, Anytown, USA', '555-1234', '{"Gender": "Male", "MaritalStatus": "Married"}'),
+  (2, 'Jane', 'Smith', '1975-05-15', '456 Park Ave, Anycity, USA', '555-5678', '{"Gender": "Female", "MaritalStatus": "Single"}'),
+  (3, 'Bob', 'Johnson', '1965-10-20', '789 Broadway, Anyville, USA', '555-9012', '{"Gender": "Male", "MaritalStatus": "Divorced"}');
+
+-- Insert some sample provider data with additional information in JSON format
+INSERT INTO Providers (ProviderID, ProviderName, Address, PhoneNumber, Specialty, AdditionalInfo)
+VALUES 
+  (1, 'Anytown Hospital', '123 Main St, Anytown, USA', '555-1111', 'Hospital', '{"Rating": 4.5, "NumBeds": 250}'),
+  (2, 'Anycity Clinic', '456 Park Ave, Anycity, USA', '555-2222', 'Clinic', '{"Rating": 3.8, "NumDoctors": 5}'),
+  (3, 'Anyville Urgent Care', '789 Broadway, Anyville, USA', '555-3333', 'Urgent Care', '{"Rating": 4.2, "NumPatients": 500}');
+
+-- Insert some sample claim data with additional information in JSON format
+INSERT INTO Claims (ClaimID, PatientID, ProviderID, ServiceDate, ServiceType, Amount, AdditionalInfo)
+VALUES 
+  (1, 1, 1, '2022-01-15', 'Inpatient', 5000.00, '{"Diagnosis": "Appendicitis", "Procedure": "Appendectomy"}'),
+  (2, 2, 2, '2022-02-01', 'Office Visit', 150.00, '{"Diagnosis": "Hypertension", "Procedure": "Check-up"}'),
+  (3, 3, 3, '2022-03-05', 'Urgent
