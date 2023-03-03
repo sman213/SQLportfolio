@@ -1,4 +1,4 @@
--- Create the Patients table to store patient information
+""create a patients/member table""
 CREATE TABLE Patients (
   PatientID INT PRIMARY KEY NOT NULL UNIQUE,
   FirstName VARCHAR(50) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE Patients (
   PhoneNumber VARCHAR(15) NOT NULL
 );
 
--- Create the Providers table to store provider information
+""create a Providers table""
 CREATE TABLE Providers (
   ProviderID INT PRIMARY KEY NOT NULL UNIQUE,
   ProviderName VARCHAR(100) NOT NULL,
@@ -17,11 +17,11 @@ CREATE TABLE Providers (
   Specialty VARCHAR(50) NOT NULL
 );
 
--- Create the Claims table to store claim information
+""create a providers table""
 CREATE TABLE Claims (
   ClaimID INT PRIMARY KEY NOT NULL UNIQUE,
-  PatientID INT NOT NULL UNIQUE,
-  ProviderID INT NOT NULL UNIQUE,
+  PatientID INT NOT NULL,
+  ProviderID INT NOT NULL,
   ServiceDate DATE NOT NULL,
   ServiceType VARCHAR(50) NOT NULL,
   Amount DECIMAL(10, 2) NOT NULL,
@@ -29,64 +29,150 @@ CREATE TABLE Claims (
   FOREIGN KEY (ProviderID) REFERENCES Providers(ProviderID)
 );
 
--- Insert some sample data into the Patients table
+
+""Some random made up data for each table""
+
 INSERT INTO Patients (PatientID, FirstName, LastName, DOB, Address, PhoneNumber)
-VALUES (1, 'Jane', 'Doe', '1980-01-01', '123 Main St', '555-555-5555'),
-       (2, 'John', 'Smith', '1985-03-15', '456 Oak Ave', '555-555-5556');
+VALUES
+  (1, 'John', 'Doe', '1990-01-01', '123 Main St, Anytown USA', '555-1234'),
+  (2, 'Jane', 'Smith', '1985-03-15', '456 Oak Ave, Anytown USA', '555-5678'),
+  (3, 'Bob', 'Johnson', '1975-12-25', '789 Elm St, Anytown USA', '555-9101'),
+  (4, 'Alice', 'Brown', '2000-05-07', '321 Maple Rd, Anytown USA', '555-1212'),
+  (5, 'Sam', 'Lee', '1995-09-10', '654 Pine Ln, Anytown USA', '555-1313');
 
--- Insert some sample data into the Providers table
+
 INSERT INTO Providers (ProviderID, ProviderName, Address, PhoneNumber, Specialty)
-VALUES (1, 'Dr. Smith', '789 Elm St', '555-555-5557', 'Pediatrics'),
-       (2, 'Dr. Jones', '246 Maple St', '555-555-5558', 'Surgery');
+VALUES
+  (1, 'Anytown Medical Center', '10 Hospital Dr, Anytown USA', '555-2468', 'General Practice'),
+  (2, 'Anytown Dental Care', '20 Dentist St, Anytown USA', '555-3690', 'Dentistry'),
+  (3, 'Anytown Chiropractic', '30 Spine Rd, Anytown USA', '555-4822', 'Chiropractic'),
+  (4, 'Anytown Vision Center', '40 Eye Ave, Anytown USA', '555-5955', 'Optometry'),
+  (5, 'Anytown Physical Therapy', '50 Mobility Blvd, Anytown USA', '555-7171', 'Physical Therapy');
 
--- Insert some sample data into the Claims table
+
 INSERT INTO Claims (ClaimID, PatientID, ProviderID, ServiceDate, ServiceType, Amount)
-VALUES (1, 1, 1, '2022-01-01', 'Annual Checkup', 100.00),
-       (2, 2, 2, '2022-02-15', 'Surgery', 5000.00);
-
--- Select all records from the Patients table
+VALUES
+  (1, 1, 1, '2022-01-01', 'Office Visit', 100.00),
+  (2, 2, 2, '2022-01-15', 'Teeth Cleaning', 80.00),
+  (3, 3, 3, '2022-02-01', 'Spinal Adjustment', 75.00),
+  (4, 4, 4, '2022-02-15', 'Eye Exam', 50.00),
+  (5, 5, 5, '2022-03-01', 'Physical Therapy', 200.00),
+  (6, 1, 2, '2022-03-15', 'Fillings', 150.00),
+  (7, 2, 3, '2022-04-01', 'Massage Therapy', 90.00),
+  (8, 3, 4, '2022-04-15', 'Contact Lenses', 100.00),
+  (9, 4, 5, '2022-05-01', 'Occupational Therapy', 175.00),
+  (10, 5, 1, '2022-05-15', 'Lab Work', 75.00);
+  
+  
+  ""Here Are 10 simple SQL query examples with the given datasets""
+  
+  ""1. Retrieve all patient information""
 SELECT * FROM Patients;
 
--- Select all records from the Providers table
-SELECT * FROM Providers;
+"" 2. Retrieve all claim information for a specific patient""
+SELECT * FROM Claims WHERE PatientID = 3;
 
--- Select all records from the Claims table
-SELECT * FROM Claims;
+"" 3. Retrieve all providers in a specific specialty""
+SELECT * FROM Providers WHERE Specialty = 'Cardiology';
 
--- Calculate the total amount charged for all claims
-SELECT SUM(Amount) AS TotalAmount
-FROM Claims;
+""4. Retrieve the total amount of claims for a specific provider""
+SELECT SUM(Amount) AS TotalAmount FROM Claims WHERE ProviderID = 2;
 
--- Calculate the average amount charged for each service type
-SELECT ServiceType, AVG(Amount) AS AverageAmount
-FROM Claims
+"" 5. Retrieve all claims with a service date between two dates""
+SELECT * FROM Claims WHERE ServiceDate BETWEEN '2022-01-01' AND '2022-12-31';
+
+"" 6. Retrieve all patients and their corresponding claims""
+SELECT Patients.*, Claims.* FROM Patients
+JOIN Claims ON Patients.PatientID = Claims.PatientID;
+
+""7. Retrieve the total amount of claims for each patient""
+SELECT Patients.FirstName, Patients.LastName, SUM(Claims.Amount) AS TotalAmount FROM Patients
+JOIN Claims ON Patients.PatientID = Claims.PatientID
+GROUP BY Patients.PatientID;
+
+"" 8. Retrieve the number of claims for each service type""
+SELECT ServiceType, COUNT(*) AS NumClaims FROM Claims
 GROUP BY ServiceType;
 
--- Retrieve the patient name and total amount charged for each patient
-SELECT p.FirstName || ' ' || p.LastName AS FullName, SUM(c.Amount) AS TotalAmount
-FROM Claims c
-JOIN Patients p ON c.PatientID = p.PatientID
-GROUP BY p.PatientID, FullName;
+""9. Retrieve all patients with no claims""
+SELECT Patients.* FROM Patients
+LEFT JOIN Claims ON Patients.PatientID = Claims.PatientID
+WHERE Claims.ClaimID IS NULL;
 
--- Retrieve the provider name and total amount charged for each provider
-SELECT pr.ProviderName, SUM(c.Amount) AS TotalAmount
-FROM Claims c
-JOIN Providers pr ON c.ProviderID = pr.ProviderID
-GROUP BY pr.ProviderID, ProviderName;
+""10. Retrieve the top 5 providers with the highest total claim amount""
+SELECT Providers.ProviderName, SUM(Claims.Amount) AS TotalAmount FROM Providers
+JOIN Claims ON Providers.ProviderID = Claims.ProviderID
+GROUP BY Providers.ProviderID
+ORDER BY TotalAmount DESC
+LIMIT 5;
 
--- Retrieve the most expensive claim for each patient
-SELECT p.FirstName || ' ' || p.LastName AS FullName, MAX(c.Amount) AS MostExpensiveClaim
-FROM Claims c
-JOIN Patients p ON c.PatientID = p.PatientID
-GROUP BY p.PatientID, FullName;
 
--- Retrieve the number of claims made by each provider
-SELECT pr.ProviderName, COUNT(c.ClaimID) AS NumberOfClaims
-FROM Claims c
-JOIN Providers pr ON c.ProviderID = pr.ProviderID
-GROUP BY pr.ProviderID, ProviderName;
+""Here are 10 more examples of more complex queries with the datasets""
 
--- Retrieve the total amount charged for claims made in a specific date range
-SELECT SUM(Amount) AS TotalAmount
+"" 1. Display the total amount of claims submitted by each patient, sorted in descending order""
+SELECT Patients.FirstName, Patients.LastName, SUM(Claims.Amount) AS Total_Claims_Amount
+FROM Patients
+INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
+GROUP BY Patients.PatientID
+ORDER BY Total_Claims_Amount DESC;
+
+""2. Display the total amount of claims submitted by each provider, sorted in descending order""
+SELECT Providers.ProviderName, SUM(Claims.Amount) AS Total_Claims_Amount
+FROM Providers
+INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
+GROUP BY Providers.ProviderID
+ORDER BY Total_Claims_Amount DESC;
+
+""3. Display the total amount of claims submitted by each specialty, sorted in descending order""
+SELECT Providers.Specialty, SUM(Claims.Amount) AS Total_Claims_Amount
+FROM Providers
+INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
+GROUP BY Providers.Specialty
+ORDER BY Total_Claims_Amount DESC;
+
+""4. Display the patients who have submitted more than 3 claims""
+SELECT Patients.FirstName, Patients.LastName, COUNT(Claims.ClaimID) AS Total_Claims_Submitted
+FROM Patients
+INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
+GROUP BY Patients.PatientID
+HAVING COUNT(Claims.ClaimID) > 3;
+
+""5. Display the patients who have submitted claims with more than $10,000 in total amount""
+SELECT Patients.FirstName, Patients.LastName, SUM(Claims.Amount) AS Total_Claims_Amount
+FROM Patients
+INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
+GROUP BY Patients.PatientID
+HAVING SUM(Claims.Amount) > 10000;
+
+""6. Display the providers who have submitted claims with more than $50,000 in total amount""
+SELECT Providers.ProviderName, SUM(Claims.Amount) AS Total_Claims_Amount
+FROM Providers
+INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
+GROUP BY Providers.ProviderID
+HAVING SUM(Claims.Amount) > 50000;
+
+""7. Display the number of claims submitted for each service type, for claims submitted in the year 2022""
+SELECT Claims.ServiceType, COUNT(Claims.ClaimID) AS Total_Claims_Submitted
 FROM Claims
-WHERE ServiceDate BETWEEN '2022-01-01' AND '2022-12-31';
+WHERE YEAR(Claims.ServiceDate) = 2022
+GROUP BY Claims.ServiceType;
+
+""8. Display the patients who have submitted claims for a specific service type""
+SELECT Patients.FirstName, Patients.LastName, Claims.ServiceType
+FROM Patients
+INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
+WHERE Claims.ServiceType = 'Surgery';
+
+""9. Display the total amount of claims submitted by patients in each state, sorted in descending order""
+SELECT SUBSTRING(Address, -2) AS State, SUM(Claims.Amount) AS Total_Claims_Amount
+FROM Patients
+INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
+GROUP BY State
+ORDER BY Total_Claims_Amount DESC;
+
+""10. Display the total amount of claims submitted by providers in each specialty, sorted in descending order""
+SELECT Providers.Specialty, SUM(Claims.Amount) AS Total_Claims_Amount
+FROM Providers
+INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
+GROUP BY Providers.Specialty
+ORDER BY Total_Claims_Amount DESC;
