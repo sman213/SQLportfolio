@@ -8,7 +8,7 @@ CREATE TABLE Patients (
   PhoneNumber VARCHAR(15) NOT NULL
 );
 
-""create a Providers table""
+""create a providers table""
 CREATE TABLE Providers (
   ProviderID INT PRIMARY KEY NOT NULL UNIQUE,
   ProviderName VARCHAR(100) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE Providers (
   Specialty VARCHAR(50) NOT NULL
 );
 
-""create a providers table""
+""create a claims table""
 CREATE TABLE Claims (
   ClaimID INT PRIMARY KEY NOT NULL UNIQUE,
   PatientID INT NOT NULL,
@@ -34,20 +34,20 @@ CREATE TABLE Claims (
 
 INSERT INTO Patients (PatientID, FirstName, LastName, DOB, Address, PhoneNumber)
 VALUES
-  (1, 'John', 'Doe', '1990-01-01', '123 Main St, Anytown USA', '555-1234'),
-  (2, 'Jane', 'Smith', '1985-03-15', '456 Oak Ave, Anytown USA', '555-5678'),
-  (3, 'Bob', 'Johnson', '1975-12-25', '789 Elm St, Anytown USA', '555-9101'),
-  (4, 'Alice', 'Brown', '2000-05-07', '321 Maple Rd, Anytown USA', '555-1212'),
-  (5, 'Sam', 'Lee', '1995-09-10', '654 Pine Ln, Anytown USA', '555-1313');
+  (1, 'John', 'Doe', '1990-01-01', '123 Main St, Some State USA', '555-1234'),
+  (2, 'Jane', 'Smith', '1985-03-15', '456 Oak Ave, Some State USA', '555-5678'),
+  (3, 'Bob', 'Johnson', '1975-12-25', '789 Elm St, Some State USA', '555-9101'),
+  (4, 'Alice', 'Brown', '2000-05-07', '321 Maple Rd, Some State USA', '555-1212'),
+  (5, 'Sam', 'Lee', '1995-09-10', '654 Pine Ln, Some State USA', '555-1313');
 
 
 INSERT INTO Providers (ProviderID, ProviderName, Address, PhoneNumber, Specialty)
 VALUES
-  (1, 'Anytown Medical Center', '10 Hospital Dr, Anytown USA', '555-2468', 'General Practice'),
-  (2, 'Anytown Dental Care', '20 Dentist St, Anytown USA', '555-3690', 'Dentistry'),
-  (3, 'Anytown Chiropractic', '30 Spine Rd, Anytown USA', '555-4822', 'Chiropractic'),
-  (4, 'Anytown Vision Center', '40 Eye Ave, Anytown USA', '555-5955', 'Optometry'),
-  (5, 'Anytown Physical Therapy', '50 Mobility Blvd, Anytown USA', '555-7171', 'Physical Therapy');
+  (1, 'Blah Blah Medical Center', '10 Hospital Dr, Anytown USA', '555-2468', 'General Practice'),
+  (2, 'Blah Blah Dental Care', '20 Dentist St, Anytown USA', '555-3690', 'Dentistry'),
+  (3, 'Blah Blah Chiropractic', '30 Spine Rd, Anytown USA', '555-4822', 'Chiropractic'),
+  (4, 'Blah Blah Vision Center', '40 Eye Ave, Anytown USA', '555-5955', 'Optometry'),
+  (5, 'Blah Blah Physical Therapy', '50 Mobility Blvd, Anytown USA', '555-7171', 'Physical Therapy');
 
 
 INSERT INTO Claims (ClaimID, PatientID, ProviderID, ServiceDate, ServiceType, Amount)
