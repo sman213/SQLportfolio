@@ -43,11 +43,11 @@ VALUES
 
 INSERT INTO Providers (ProviderID, ProviderName, Address, PhoneNumber, Specialty)
 VALUES
-  (1, 'Blah Blah Medical Center', '10 Hospital Dr, Anytown USA', '555-2468', 'General Practice'),
-  (2, 'Blah Blah Dental Care', '20 Dentist St, Anytown USA', '555-3690', 'Dentistry'),
-  (3, 'Blah Blah Chiropractic', '30 Spine Rd, Anytown USA', '555-4822', 'Chiropractic'),
-  (4, 'Blah Blah Vision Center', '40 Eye Ave, Anytown USA', '555-5955', 'Optometry'),
-  (5, 'Blah Blah Physical Therapy', '50 Mobility Blvd, Anytown USA', '555-7171', 'Physical Therapy');
+  (1, 'Blah Blah Medical Center', '10 Hospital Dr, Some State USA', '555-2468', 'General Practice'),
+  (2, 'Blah Blah Mental Health', '20 Dentist St, Some State USA', '555-3690', 'Mental Health'),
+  (3, 'Blah Blah Chiropractic', '30 Spine Rd, Some State USA', '555-4822', 'Chiropractic'),
+  (4, 'Blah Blah Vision Center', '40 Eye Ave, Some State USA', '555-5955', 'Optometry'),
+  (5, 'Blah Blah Physical Therapy', '50 Mobility Blvd, State USA', '555-7171', 'Physical Therapy');
 
 
 INSERT INTO Claims (ClaimID, PatientID, ProviderID, ServiceDate, ServiceType, Amount)
