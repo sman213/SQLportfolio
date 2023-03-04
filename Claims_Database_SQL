@@ -73,7 +73,7 @@ SELECT * FROM Patients;
 SELECT * FROM Claims WHERE PatientID = 3;
 
 "" 3. Retrieve all providers in a specific specialty""
-SELECT * FROM Providers WHERE Specialty = 'Cardiology';
+SELECT * FROM Providers WHERE Specialty = 'Optometry';
 
 ""4. Retrieve the total amount of claims for a specific provider""
 SELECT SUM(Amount) AS TotalAmount FROM Claims WHERE ProviderID = 2;
@@ -94,7 +94,7 @@ GROUP BY Patients.PatientID;
 SELECT ServiceType, COUNT(*) AS NumClaims FROM Claims
 GROUP BY ServiceType;
 
-""9. Retrieve all patients with no claims""
+""9. Retrieve all patients with no claims, this wll return nothing""
 SELECT Patients.* FROM Patients
 LEFT JOIN Claims ON Patients.PatientID = Claims.PatientID
 WHERE Claims.ClaimID IS NULL;
@@ -130,49 +130,83 @@ INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
 GROUP BY Providers.Specialty
 ORDER BY Total_Claims_Amount DESC;
 
-""4. Display the patients who have submitted more than 3 claims""
+""4. Display the patients who have submitted more than greater than or equal to 1 claim""
 SELECT Patients.FirstName, Patients.LastName, COUNT(Claims.ClaimID) AS Total_Claims_Submitted
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
 GROUP BY Patients.PatientID
 HAVING COUNT(Claims.ClaimID) > 3;
 
-""5. Display the patients who have submitted claims with more than $10,000 in total amount""
+""5. Display the patients who have submitted claims with more than $100 in total amount""
 SELECT Patients.FirstName, Patients.LastName, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
 GROUP BY Patients.PatientID
-HAVING SUM(Claims.Amount) > 10000;
+HAVING SUM(Claims.Amount) > 100;
 
-""6. Display the providers who have submitted claims with more than $50,000 in total amount""
+""6. Display the providers who have submitted claims with more than $1,000 in total amount, this will return nothing""
 SELECT Providers.ProviderName, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Providers
 INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
 GROUP BY Providers.ProviderID
-HAVING SUM(Claims.Amount) > 50000;
+HAVING SUM(Claims.Amount) > 1000;
 
-""7. Display the number of claims submitted for each service type, for claims submitted in the year 2022""
-SELECT Claims.ServiceType, COUNT(Claims.ClaimID) AS Total_Claims_Submitted
-FROM Claims
-WHERE YEAR(Claims.ServiceDate) = 2022
-GROUP BY Claims.ServiceType;
 
-""8. Display the patients who have submitted claims for a specific service type""
+""7. Display the patients who have submitted claims for a specific service type""
 SELECT Patients.FirstName, Patients.LastName, Claims.ServiceType
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
-WHERE Claims.ServiceType = 'Surgery';
+WHERE Claims.ServiceType = 'Lab Work';
 
-""9. Display the total amount of claims submitted by patients in each state, sorted in descending order""
+""8. Display the total amount of claims submitted by patients in each state, sorted in descending order""
 SELECT SUBSTRING(Address, -2) AS State, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
 GROUP BY State
 ORDER BY Total_Claims_Amount DESC;
 
-""10. Display the total amount of claims submitted by providers in each specialty, sorted in descending order""
+""9. Display the total amount of claims submitted by providers in each specialty, sorted in descending order""
 SELECT Providers.Specialty, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Providers
 INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
 GROUP BY Providers.Specialty
 ORDER BY Total_Claims_Amount DESC;
+
+""10. This query retrieves information about patients who have medical claims for services rendered by providers in "some state". 
+It returns each patient's name, address, the total amount they have paid for medical claims, and the number of unique Mental Health
+and Physical Therapy providers they have seen. The query also filters the results to only include patients who have paid more than
+$100 in total medical claims, and sorts the results in descending order of the number of Mental Health providers seen and ascending
+order of the number of Physical Therapy providers seen.""
+SELECT
+  p.FirstName,
+  p.LastName,
+  p.Address,
+  SUM(c.Amount) AS TotalAmountPaid,
+  (
+    SELECT COUNT(DISTINCT p2.ProviderID)
+    FROM Claims c2
+    INNER JOIN Providers p2 ON c2.ProviderID = p2.ProviderID
+    WHERE c2.PatientID = p.PatientID
+    AND p2.Specialty = 'Mental Health'
+  ) AS NumCardiologyProviders,
+  (
+    SELECT COUNT(DISTINCT p3.ProviderID)
+    FROM Claims c3
+    INNER JOIN Providers p3 ON c3.ProviderID = p3.ProviderID
+    WHERE c3.PatientID = p.PatientID
+    AND p3.Specialty = 'Physical Therapy'
+  ) AS NumRadiologyProviders
+FROM
+  Patients p
+  INNER JOIN Claims c ON p.PatientID = c.PatientID
+  INNER JOIN Providers pr ON c.ProviderID = pr.ProviderID
+WHERE
+  p.Address LIKE '%Some State%'
+GROUP BY
+  p.PatientID
+HAVING
+   SUM(c.amount) >= 100
+ORDER BY
+  NumCardiologyProviders DESC,
+  NumRadiologyProviders ASC;
+
