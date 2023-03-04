@@ -107,7 +107,7 @@ ORDER BY TotalAmount DESC
 LIMIT 5;
 
 
-""Here are 10 more examples of more complex queries with the datasets""
+""Here are 10 examples of more complex queries with the datasets""
 
 "" 1. Display the total amount of claims submitted by each patient, sorted in descending order""
 SELECT Patients.FirstName, Patients.LastName, SUM(Claims.Amount) AS Total_Claims_Amount
