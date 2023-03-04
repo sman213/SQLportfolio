@@ -38,7 +38,7 @@ VALUES
   (2, 'Jane', 'Smith', '1985-03-15', '456 Oak Ave, Some State USA', '555-5678'),
   (3, 'Bob', 'Johnson', '1975-12-25', '789 Elm St, Some State USA', '555-9101'),
   (4, 'Alice', 'Brown', '2000-05-07', '321 Maple Rd, Some State USA', '555-1212'),
-  (5, 'Sam', 'Lee', '1995-09-10', '654 Pine Ln, Some State USA', '555-1313');
+  (5, 'Sam', 'Lee', '1995-09-10', '654 Pine Ln, Some State State USA', '555-1313');
 
 
 INSERT INTO Providers (ProviderID, ProviderName, Address, PhoneNumber, Specialty)
