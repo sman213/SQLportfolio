@@ -1,4 +1,5 @@
-""create a patients/member table""
+#Create a patient/member table
+
 CREATE TABLE Patients (
   PatientID INT PRIMARY KEY NOT NULL UNIQUE,
   FirstName VARCHAR(50) NOT NULL,
@@ -8,7 +9,8 @@ CREATE TABLE Patients (
   PhoneNumber VARCHAR(15) NOT NULL
 );
 
-""create a providers table""
+#Create a Providers table
+
 CREATE TABLE Providers (
   ProviderID INT PRIMARY KEY NOT NULL UNIQUE,
   ProviderName VARCHAR(100) NOT NULL,
@@ -17,7 +19,8 @@ CREATE TABLE Providers (
   Specialty VARCHAR(50) NOT NULL
 );
 
-""create a claims table""
+#Create a Claims table
+
 CREATE TABLE Claims (
   ClaimID INT PRIMARY KEY NOT NULL UNIQUE,
   PatientID INT NOT NULL,
@@ -30,7 +33,7 @@ CREATE TABLE Claims (
 );
 
 
-""Some random made up data for each table""
+#Some random data for each table
 
 INSERT INTO Patients (PatientID, FirstName, LastName, DOB, Address, PhoneNumber)
 VALUES
@@ -64,42 +67,42 @@ VALUES
   (10, 5, 1, '2022-05-15', 'Lab Work', 75.00);
   
   
-  ""Here Are 10 simple SQL query examples with the given datasets""
+  #Here Are 10 simple SQL query examples with the given datasets
   
-  ""1. Retrieve all patient information""
+#1. Retrieve all patient information
 SELECT * FROM Patients;
 
-"" 2. Retrieve all claim information for a specific patient""
+# 2. Retrieve all claim information for a specific patient
 SELECT * FROM Claims WHERE PatientID = 3;
 
-"" 3. Retrieve all providers in a specific specialty""
+# 3. Retrieve all providers in a specific specialt#
 SELECT * FROM Providers WHERE Specialty = 'Optometry';
 
-""4. Retrieve the total amount of claims for a specific provider""
+#4. Retrieve the total amount of claims for a specific provider
 SELECT SUM(Amount) AS TotalAmount FROM Claims WHERE ProviderID = 2;
 
-"" 5. Retrieve all claims with a service date between two dates""
+#5. Retrieve all claims with a service date between two dates
 SELECT * FROM Claims WHERE ServiceDate BETWEEN '2022-01-01' AND '2022-12-31';
 
-"" 6. Retrieve all patients and their corresponding claims""
+#6. Retrieve all patients and their corresponding claims
 SELECT Patients.*, Claims.* FROM Patients
 JOIN Claims ON Patients.PatientID = Claims.PatientID;
 
-""7. Retrieve the total amount of claims for each patient""
+#7. Retrieve the total amount of claims for each patient
 SELECT Patients.FirstName, Patients.LastName, SUM(Claims.Amount) AS TotalAmount FROM Patients
 JOIN Claims ON Patients.PatientID = Claims.PatientID
 GROUP BY Patients.PatientID;
 
-"" 8. Retrieve the number of claims for each service type""
+# 8. Retrieve the number of claims for each service type
 SELECT ServiceType, COUNT(*) AS NumClaims FROM Claims
 GROUP BY ServiceType;
 
-""9. Retrieve all patients with no claims, this wll return nothing""
+#9. Retrieve all patients with no claims, since each patient has a claim this wll return nothing
 SELECT Patients.* FROM Patients
 LEFT JOIN Claims ON Patients.PatientID = Claims.PatientID
 WHERE Claims.ClaimID IS NULL;
 
-""10. Retrieve the top 5 providers with the highest total claim amount""
+#10. Retrieve the top 5 providers with the highest total claim amount""
 SELECT Providers.ProviderName, SUM(Claims.Amount) AS TotalAmount FROM Providers
 JOIN Claims ON Providers.ProviderID = Claims.ProviderID
 GROUP BY Providers.ProviderID
@@ -107,44 +110,44 @@ ORDER BY TotalAmount DESC
 LIMIT 5;
 
 
-""Here are 10 examples of more complex queries with the datasets""
+#Here are 10 examples of more complex queries with the dataset
 
-"" 1. Display the total amount of claims submitted by each patient, sorted in descending order""
+# 1. Display the total amount of claims submitted by each patient, sorted in descending order
 SELECT Patients.FirstName, Patients.LastName, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
 GROUP BY Patients.PatientID
 ORDER BY Total_Claims_Amount DESC;
 
-""2. Display the total amount of claims submitted by each provider, sorted in descending order""
+#2. Display the total amount of claims submitted by each provider, sorted in descending order
 SELECT Providers.ProviderName, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Providers
 INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
 GROUP BY Providers.ProviderID
 ORDER BY Total_Claims_Amount DESC;
 
-""3. Display the total amount of claims submitted by each specialty, sorted in descending order""
+#3. Display the total amount of claims submitted by each specialty, sorted in descending order
 SELECT Providers.Specialty, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Providers
 INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
 GROUP BY Providers.Specialty
 ORDER BY Total_Claims_Amount DESC;
 
-""4. Display the patients who have submitted more than greater than or equal to 1 claim""
+#4. Display the patients who have submitted more than greater than or equal to 1 claim
 SELECT Patients.FirstName, Patients.LastName, COUNT(Claims.ClaimID) AS Total_Claims_Submitted
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
 GROUP BY Patients.PatientID
 HAVING COUNT(Claims.ClaimID) > 3;
 
-""5. Display the patients who have submitted claims with more than $100 in total amount""
+#5. Display the patients who have submitted claims with more than $100 in total amount
 SELECT Patients.FirstName, Patients.LastName, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
 GROUP BY Patients.PatientID
 HAVING SUM(Claims.Amount) > 100;
 
-""6. Display the providers who have submitted claims with more than $1,000 in total amount, this will return nothing""
+#6. Display the providers who have submitted claims with more than $1,000 in total amount, since im kind and I kept the costs low, this will return nothing
 SELECT Providers.ProviderName, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Providers
 INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
@@ -152,31 +155,31 @@ GROUP BY Providers.ProviderID
 HAVING SUM(Claims.Amount) > 1000;
 
 
-""7. Display the patients who have submitted claims for a specific service type""
+#7. Display the patients who have submitted claims for a specific service type
 SELECT Patients.FirstName, Patients.LastName, Claims.ServiceType
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
 WHERE Claims.ServiceType = 'Lab Work';
 
-""8. Display the total amount of claims submitted by patients in each state, sorted in descending order""
+#8. Display the total amount of claims submitted by patients in each state, sorted in descending order
 SELECT SUBSTRING(Address, -2) AS State, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Patients
 INNER JOIN Claims ON Patients.PatientID = Claims.PatientID
 GROUP BY State
 ORDER BY Total_Claims_Amount DESC;
 
-""9. Display the total amount of claims submitted by providers in each specialty, sorted in descending order""
+#9. Display the total amount of claims submitted by providers in each specialty, sorted in descending order
 SELECT Providers.Specialty, SUM(Claims.Amount) AS Total_Claims_Amount
 FROM Providers
 INNER JOIN Claims ON Providers.ProviderID = Claims.ProviderID
 GROUP BY Providers.Specialty
 ORDER BY Total_Claims_Amount DESC;
 
-""10. This query retrieves information about patients who have medical claims for services rendered by providers in "some state". 
+"""10. This query retrieves information about patients who have medical claims for services rendered by providers in "some state". 
 It returns each patient's name, address, the total amount they have paid for medical claims, and the number of unique Mental Health
 and Physical Therapy providers they have seen. The query also filters the results to only include patients who have paid more than
 $100 in total medical claims, and sorts the results in descending order of the number of Mental Health providers seen and ascending
-order of the number of Physical Therapy providers seen.""
+order of the number of Physical Therapy providers seen."""
 SELECT
   p.FirstName,
   p.LastName,
