@@ -177,7 +177,7 @@ ORDER BY Total_Claims_Amount DESC;
 
 """10. This query retrieves information about patients who have medical claims for services rendered by providers in "some state". 
 It returns each patient's name, address, the total amount they have paid for medical claims, and the number of unique Mental Health
-and Physical Therapy providers they have seen. The query also filters the results to only include patients who have paid more than
+and Physical Therapy providers they have seen. The query also filters the results to only include patients who have paid at least
 $100 in total medical claims, and sorts the results in descending order of the number of Mental Health providers seen and ascending
 order of the number of Physical Therapy providers seen."""
 SELECT
